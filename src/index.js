@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Loader from './Loader';
+import SeasonDisplay from './SeasonDisplay';
 
 class App extends React.Component {
   // constructor(props) {
@@ -25,21 +26,24 @@ class App extends React.Component {
     console.log('DidUpdate');
   }
 
-  render() {
-    // return (
-    //   <div>
-    //     Latitude: {this.state.lat}
-    //     <br />
-    //     Error: {this.state.errorMessage}
-    //   </div>
-    // );
+  // If we have conditional render logic, we should put it in a helper method, not in the render() itself
+  renderContent() {
     if (this.state.errorMessage && !this.state.lat) {
       return <div>Error: {this.state.errorMessage}</div>
     } else if (!this.state.errorMessage && this.state.lat) {
-      return <div>Latitude: {this.state.lat}</div>
+      return <SeasonDisplay lat={this.state.lat}/>
     } else {
-      return <Loader />
+      return <Loader message='Please accept location request'/>
     }
+  }
+
+  render() {
+    //example of why we should use the helper method: I want to show whatever I render, with a red border:
+    return (
+      <div className='border red'>
+        { this.renderContent() }
+      </div>
+    );
   }
 }
 
